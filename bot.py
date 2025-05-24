@@ -4,8 +4,8 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # Настройки из переменных окружения
-TOKEN = os.environ.get('TOKEN')
-YOUR_CHAT_ID = os.environ.get('YOUR_CHAT_ID')
+TOKEN = os.environ{'TOKEN'}
+YOUR_CHAT_ID = os.environ{'YOUR_CHAT_ID'}
 
 # Полное меню из 15 блюд
 menu = {
