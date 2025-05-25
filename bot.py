@@ -224,9 +224,8 @@ def main():
         listen="0.0.0.0",
         port=port,
         secret_token='RENDER_SECRET',
-        webhook_url=f"https://telegram-bot-for-her.onrender.com/{TOKEN}"
+        webhook_url=f"https://AntonioPizduchi_bot.onrender.com/{TOKEN}"
     )
 
 if __name__ == "__main__":
     main()
-
