@@ -104,6 +104,7 @@ compliments = [
     "Ты — воплощение нежности и силы одновременно. 🌸💪"
 ]
 
+
 user_cart = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -128,7 +129,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     cart_text = "🛒 Корзина пуста"
     if user_id in user_cart and user_cart[user_id]["items"]:
-        cart_text = f"🛒 Корзина ({len(user_cart[user_id]['items']}) 💋 {user_cart[user_id]['total_kisses']}"
+        cart_text = f"🛒 Корзина ({len(user_cart[user_id]['items'])}) 💋 {user_cart[user_id]['total_kisses']}"
     
     keyboard.append([InlineKeyboardButton(cart_text, callback_data="cart")])
     
