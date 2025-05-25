@@ -4,8 +4,8 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # Настройки из переменных окружения
-TOKEN = 7881997030:AAGq2mfyXCcEcGQSqWcZMtzIA9KR-Ls5cbo 
-YOUR_CHAT_ID = 659818833
+TOKEN = os.environ['TOKEN']
+YOUR_CHAT_ID = os.environ['YOUR_CHAT_ID']
 
 # Полное меню из 15 блюд
 menu = {
@@ -116,17 +116,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         row = []
         for j in range(i, min(i+2, len(menu_items))):
             item = menu_items[j]
-            row.append(InlineKeyboardButton(
-                f"{item[1]['name']} 💋 {item[1]['price']}",
-                callback_data=item[0]
-            ))
+            row.append(
+                InlineKeyboardButton(
+                    f"{item[1]['name']} 💋 {item[1]['price']}",
+                    callback_data=item[0]
+                )
+            )
         keyboard.append(row)
     
     # Кнопка корзины
     user_id = update.effective_user.id
     cart_text = "🛒 Корзина пуста"
     if user_id in user_cart and user_cart[user_id]["items"]:
-        cart_text = f"🛒 Корзина ({len(user_cart[user_id]['items'])}) 💋 {user_cart[user_id]['total_kisses']}"
+        cart_text = f"🛒 Корзина ({len(user_cart[user_id]['items']}) 💋 {user_cart[user_id]['total_kisses']}"
     
     keyboard.append([InlineKeyboardButton(cart_text, callback_data="cart")])
     
@@ -226,3 +228,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
