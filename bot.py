@@ -228,7 +228,7 @@ def main():
         listen="0.0.0.0",
         port=port,
         secret_token='RENDER_SECRET',
-        webhook_url=f"https://AntonioPizduchi_bot.onrender.com/{TOKEN}"
+        webhook_url=f"https://AntonioPizduchi_bot.onrender.com/7881997030:AAGq2mfyXCcEcGQSqWcZMtzIA9KR-Ls5cbo"
     )
 
 if __name__ == "__main__":
