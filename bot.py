@@ -1,5 +1,7 @@
 import os
 import random
+import logging
+logging.basicConfig(level=logging.INFO)
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
@@ -108,6 +110,8 @@ compliments = [
 user_cart = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logging.info("Получена команда /start!")  # Логирование
+    # ... остальной код ...
     """Приветственное сообщение с меню"""
     menu_items = list(menu.items())
     keyboard = []
