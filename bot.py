@@ -1,9 +1,7 @@
 import os
 import random
-import logging
-logging.basicConfig(level=logging.INFO)
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, TypeHandler
 
 # Настройки из переменных окружения
 TOKEN = os.environ['TOKEN']
@@ -110,8 +108,7 @@ compliments = [
 user_cart = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logging.info("Получена команда /start!")  # Логирование
-    # ... остальной код ...
+
     """Приветственное сообщение с меню"""
     menu_items = list(menu.items())
     keyboard = []
@@ -209,6 +206,22 @@ async def checkout(query, context):
             text=f"{random.choice(compliments)}\nСпасибо за заказ, Зая! Оплата: 💋 {total} поцелуев! Готовлю с любовью! ❤️"
         )
         user_cart[user_id] = {"items": [], "total_kisses": 0}
+       
+        # Добавьте этот новый обработчик!
+async def handle_webhook(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обработчик для корневого маршрута (/)"""
+    # Пустой метод, но он нужен для работы вебхука
+    return
+def main():
+    port = 10000  # Обязательно укажите порт 10000 для Render
+    app = Application.builder().token(TOKEN).build()
+    
+    # Регистрируем обработчики
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(handle_query))
+    
+    # Добавьте эту строку ↓↓↓
+    app.add_handler(TypeHandler(Update, handle_webhook))
 
 def main():
     """Запуск бота"""
@@ -226,7 +239,7 @@ def main():
     # Для Render
     app.run_webhook(
         listen="0.0.0.0",
-        port=port,
+        port=10000,
         secret_token='RENDER_SECRET',
         webhook_url=f"https://AntonioPizduchi_bot.onrender.com/7881997030:AAGq2mfyXCcEcGQSqWcZMtzIA9KR-Ls5cbo"
     )
