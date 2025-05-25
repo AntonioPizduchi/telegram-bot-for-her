@@ -1,5 +1,12 @@
 import os
 import random
+import logging
+logging.basicConfig(
+format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, TypeHandler
 
@@ -209,9 +216,9 @@ async def checkout(query, context):
        
         # Добавьте этот новый обработчик!
 async def handle_webhook(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработчик для корневого маршрута (/)"""
-    # Пустой метод, но он нужен для работы вебхука
+    logger.info(f"Вебхук получен: {update}")
     return
+
 def main():
     port = 10000  # Обязательно укажите порт 10000 для Render
     app = Application.builder().token(TOKEN).build()
