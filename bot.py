@@ -1,16 +1,22 @@
 import os
-import random
 import logging
+import random
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    CallbackQueryHandler,
+    ContextTypes,
+    TypeHandler
+)
+
+# Настройка логов
 logging.basicConfig(
-format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, TypeHandler
-
-# Настройки из переменных окружения
 TOKEN = os.environ['TOKEN']
 YOUR_CHAT_ID = os.environ['YOUR_CHAT_ID']
 
@@ -115,11 +121,13 @@ compliments = [
 user_cart = {}
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-    """Приветственное сообщение с меню"""
+    """Обработчик команды /start"""
+    logger.info(f"Получен /start от {update.effective_user.username}")
+    
+    # Ваш код построения меню
     menu_items = list(menu.items())
     keyboard = []
-    
+
     # Создаем кнопки меню (2 в ряд)
     for i in range(0, len(menu_items), 2):
         row = []
@@ -147,7 +155,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def handle_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработка нажатий на кнопки"""
+    """Обработчик кнопок"""
+    logger.info(f"Нажата кнопка: {update.callback_query.data}")
+
     query = update.callback_query
     await query.answer()
     user_id = query.from_user.id
@@ -216,18 +226,19 @@ async def checkout(query, context):
        
         # Добавьте этот новый обработчик!
 async def handle_webhook(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    logger.info(f"Вебхук получен: {update}")
+    """Обязательный обработчик для корневого URL"""
+    logger.info("Получен вебхук от Telegram")
     return
 
 def main():
-    port = 10000  # Обязательно укажите порт 10000 для Render
+    # Явно указываем порт 10000 для Render
+    port = 10000
+    
     app = Application.builder().token(TOKEN).build()
     
-    # Регистрируем обработчики
+    # Регистрация обработчиков ДО запуска
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(handle_query))
-    
-    # Добавьте эту строку ↓↓↓
     app.add_handler(TypeHandler(Update, handle_webhook))
 
 def main():
@@ -243,12 +254,13 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(handle_query))
 
-    # Для Render
+    # Настройка вебхука
     app.run_webhook(
         listen="0.0.0.0",
-        port=10000,
+        port=port,
         secret_token='RENDER_SECRET',
-        webhook_url=f"https://AntonioPizduchi_bot.onrender.com/7881997030:AAGq2mfyXCcEcGQSqWcZMtzIA9KR-Ls5cbo"
+        webhook_url=f"https://AntonioPizduchi_bot.onrender.com/{TOKEN}",
+        drop_pending_updates=True
     )
 
 if __name__ == "__main__":
